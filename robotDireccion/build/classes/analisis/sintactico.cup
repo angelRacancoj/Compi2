@@ -1,0 +1,42 @@
+package analisis;
+
+import java_cup.runtime.*;
+
+parser code {:
+
+	public void syntax_error(Symbol cur_token) {
+		String message = "Estructura invalida en posición " + cur_token.right
+			 + ", token: " + cur_token.value;
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");	 
+		System.out.println(message);
+		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+
+
+:}
+
+/* Terminal */
+terminal String Comienza, Oeste, Este, Sur, Norte;
+
+/* Non terminal */
+non terminal String S;
+non terminal posicion D, K;
+
+start with S;
+
+S 	::= D:e 			{: System.out.println("La posicion final del Robot es X: " + e.posX + " la posicion en Y: " + e.posY); :}
+		;
+
+D	::= D:e1 K:e2 		{: RESULT = new posicion(e1.posX + e2.posX, e1.posY + e2.posY); 
+						System.out.println("Posicion actual X: "+ (e1.posX + e2.posX) +", Y: "+ (e1.posY + e2.posY));:}
+		;
+
+D 	::= Comienza K:e 	{: RESULT = new posicion((0 + e.posX),(0 + e.posY)); 
+						System.out.println("Posicion actual X: "+ e.posX +", Y: "+ e.posY);:}
+		;
+
+K	::= Oeste 			{:RESULT = new posicion(-1, 0); 	System.out.println("Oeste");:}
+		| Este 			{:RESULT = new posicion(1, 0); 		System.out.println("Este");	:}
+		| Sur 			{:RESULT = new posicion(0, -1); 	System.out.println("Sur");	:}
+		| Norte 		{:RESULT = new posicion(0, 1); 		System.out.println("Norte");:}
+		;

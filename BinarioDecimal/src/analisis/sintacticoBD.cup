@@ -1,0 +1,41 @@
+package analisis;
+
+import java_cup.runtime.*;
+
+parser code {:
+
+	public void syntax_error(Symbol cur_token) {
+		String message = "Estructura invalida en posición " + cur_token.right
+			 + ", token: " + cur_token.value;
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");	 
+		System.out.println(message);
+		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+
+
+:}
+
+/* Terminal */
+terminal Integer Cero, Uno;
+terminal String Punto;
+
+/* Non terminal */
+non terminal String D;
+non terminal ValueAndPosicion S, L, B;
+
+start with D;
+
+D 	::= S:e					{: System.out.println("El valor en decimal es: " + e.value); :}
+		;
+
+S 	::= L:e1 Punto L:e2 	{: RESULT = new ValueAndPosicion(e1.value + (e2.value / Math.pow(2, e2.posicion)),0); :}
+		| L:e 				{: RESULT = new ValueAndPosicion(e.value,e.posicion); :}
+		;
+
+L 	::= L:e1 B:e2 			{: RESULT = new ValueAndPosicion((e1.value * 2) + e2.value, e1.posicion + e2.posicion); :}
+		| B:e 				{: RESULT = new ValueAndPosicion(e.value,e.posicion); :}
+		;
+
+B 	::= Cero 				{: RESULT = new ValueAndPosicion(0,1); :}
+		| Uno 				{: RESULT = new ValueAndPosicion(1,1); :}
+		;
