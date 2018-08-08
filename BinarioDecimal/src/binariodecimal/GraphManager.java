@@ -11,5 +11,13 @@ package binariodecimal;
  */
 public class GraphManager {
 
-//    public String addNode
+    public void createGraph(String nodes) {
+        String textOut = "";
+        textOut = "digraph G {\nnode [shape = record,height=.1];\n";
+        //texto nodos
+
+        //texto nodos
+        textOut += "}";
+
+    }
 }
