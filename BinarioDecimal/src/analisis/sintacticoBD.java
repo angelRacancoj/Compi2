@@ -4,6 +4,7 @@
 package analisis;
 
 import java_cup.runtime.*;
+import binariodecimal.GraphManager;
 import java_cup.runtime.XMLElement;
 
 /**
@@ -145,12 +146,20 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
         return 1;
     }
 
+    int contador = 0;
+    String textOut = "";
+    GraphManager graph = new GraphManager();
+
     public void syntax_error(Symbol cur_token) {
         String message = "Estructura invalida en posición " + cur_token.right
                 + ", token: " + cur_token.value;
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");
         System.out.println(message);
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    }
+
+    public String addText(String comdand, String toAdd) {
+        return (comdand += toAdd);
     }
 
     /**
@@ -204,6 +213,7 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                     int eright = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).right;
                     ValueAndPosicion e = (ValueAndPosicion) ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).value;
                     System.out.println("El valor en decimal es: " + e.value);
+                    graph.createGraph(e);
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("D", 0, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -218,7 +228,10 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                     int e2left = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).left;
                     int e2right = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).right;
                     ValueAndPosicion e2 = (ValueAndPosicion) ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).value;
-                    RESULT = new ValueAndPosicion(e1.value + (e2.value / Math.pow(2, e2.posicion)), 0);
+                    contador++;
+                    RESULT = new ValueAndPosicion(e1.value + (e2.value / Math.pow(2, e2.posicion)), e1.posicion, "S", contador,
+                            addText(addText(addText(e1.graph, graph.crearNodo(e1, new Node("S", contador))), addText(e2.graph, graph.crearNodo(e2, new Node("S", contador)))),
+                                    graph.addComa((contador + 1), new Node("S", contador))));
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("S", 1, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.elementAt(CUP$sintacticoBD$top - 2)), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -230,7 +243,8 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                     int eleft = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).left;
                     int eright = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).right;
                     ValueAndPosicion e = (ValueAndPosicion) ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).value;
-                    RESULT = new ValueAndPosicion(e.value, e.posicion);
+                    contador++;
+                    RESULT = new ValueAndPosicion(e.value, e.posicion, "S", contador, addText(e.graph, graph.crearNodo(e, new Node("S", contador))));
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("S", 1, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -245,7 +259,9 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                     int e2left = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).left;
                     int e2right = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).right;
                     ValueAndPosicion e2 = (ValueAndPosicion) ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).value;
-                    RESULT = new ValueAndPosicion((e1.value * 2) + e2.value, e1.posicion + e2.posicion);
+                    contador++;
+                    RESULT = new ValueAndPosicion((e1.value * 2) + e2.value, e1.posicion + e2.posicion, "L", contador,
+                            addText(addText(e1.graph, graph.crearNodo(e1, new Node("L", contador))), addText(e2.graph, graph.crearNodo(e2, new Node("L", contador)))));
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("L", 2, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.elementAt(CUP$sintacticoBD$top - 1)), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -257,7 +273,8 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                     int eleft = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).left;
                     int eright = ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).right;
                     ValueAndPosicion e = (ValueAndPosicion) ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()).value;
-                    RESULT = new ValueAndPosicion(e.value, e.posicion);
+                    contador++;
+                    RESULT = new ValueAndPosicion(e.value, e.posicion, "L", contador, addText(e.graph, graph.crearNodo(e, new Node("L", contador))));
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("L", 2, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -266,7 +283,8 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                 case 6: // B ::= Cero
                 {
                     ValueAndPosicion RESULT = null;
-                    RESULT = new ValueAndPosicion(0, 1);
+                    contador++;
+                    RESULT = new ValueAndPosicion(0, 1, "B", contador, "");
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("B", 3, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
@@ -275,7 +293,8 @@ public class sintacticoBD extends java_cup.runtime.lr_parser {
                 case 7: // B ::= Uno
                 {
                     ValueAndPosicion RESULT = null;
-                    RESULT = new ValueAndPosicion(1, 1);
+                    contador++;
+                    RESULT = new ValueAndPosicion(1, 1, "B", contador, "");
                     CUP$sintacticoBD$result = parser.getSymbolFactory().newSymbol("B", 3, ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintacticoBD$stack.peek()), RESULT);
                 }
                 return CUP$sintacticoBD$result;
