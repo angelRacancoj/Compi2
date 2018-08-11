@@ -1,0 +1,38 @@
+digraph G {
+node [shape = record,height=.1];
+nodeS17[shape=record, label = "{<f0>S|Valor: 9.5625|<f1>Posicion: 4}"];
+nodeB1[shape=record, label = "{<f0>B|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL2":f1 -> "nodeB1":f0;
+nodeL2[shape=record, label = "{<f0>L|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL4":f1 -> "nodeL2":f0;
+nodeB3[shape=record, label = "{<f0>B|Valor: 0.0|<f1>Posicion: 1}"];
+"nodeL4":f1 -> "nodeB3":f0;
+nodeL4[shape=record, label = "{<f0>L|Valor: 2.0|<f1>Posicion: 2}"];
+"nodeL6":f1 -> "nodeL4":f0;
+nodeB5[shape=record, label = "{<f0>B|Valor: 0.0|<f1>Posicion: 1}"];
+"nodeL6":f1 -> "nodeB5":f0;
+nodeL6[shape=record, label = "{<f0>L|Valor: 4.0|<f1>Posicion: 3}"];
+"nodeL8":f1 -> "nodeL6":f0;
+nodeB7[shape=record, label = "{<f0>B|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL8":f1 -> "nodeB7":f0;
+nodeL8[shape=record, label = "{<f0>L|Valor: 9.0|<f1>Posicion: 4}"];
+"nodeS17":f1 -> "nodeL8":f0;
+nodeB9[shape=record, label = "{<f0>B|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL10":f1 -> "nodeB9":f0;
+nodeL10[shape=record, label = "{<f0>L|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL12":f1 -> "nodeL10":f0;
+nodeB11[shape=record, label = "{<f0>B|Valor: 0.0|<f1>Posicion: 1}"];
+"nodeL12":f1 -> "nodeB11":f0;
+nodeL12[shape=record, label = "{<f0>L|Valor: 2.0|<f1>Posicion: 2}"];
+"nodeL14":f1 -> "nodeL12":f0;
+nodeB13[shape=record, label = "{<f0>B|Valor: 0.0|<f1>Posicion: 1}"];
+"nodeL14":f1 -> "nodeB13":f0;
+nodeL14[shape=record, label = "{<f0>L|Valor: 4.0|<f1>Posicion: 3}"];
+"nodeL16":f1 -> "nodeL14":f0;
+nodeB15[shape=record, label = "{<f0>B|Valor: 1.0|<f1>Posicion: 1}"];
+"nodeL16":f1 -> "nodeB15":f0;
+nodeL16[shape=record, label = "{<f0>L|Valor: 9.0|<f1>Posicion: 4}"];
+"nodeS17":f1 -> "nodeL16":f0;
+nodeComa[shape=record, label = "{<f0>','}"];
+"nodeS17":f0 -> "nodeComa":f0;
+}

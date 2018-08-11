@@ -26,9 +26,9 @@ public class GraphManager {
         textOut += nodeToAdd.getGraph();
         //texto nodos
         textOut += "}";
-        files.guardarArchivo("/home/angel/grafica1.dot", textOut);
+        files.guardarArchivo("grafica1.dot", textOut);
 
-        files.runGraphviz("/home/angel/grafica1");
+        files.runGraphviz("grafica1");
     }
 
     public String crearNodo(ValueAndPosicion nodeToAdd, Node nodeP) {

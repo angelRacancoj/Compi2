@@ -43,7 +43,7 @@ public class readAndWrite {
         try {
 
             // run the Unix "ps -ef" command
-            Process p = Runtime.getRuntime().exec("dot -Tpng " + path + ".dot -o /home/angel/grafica1.png");
+            Process p = Runtime.getRuntime().exec("dot -Tpng " + path + ".dot -o grafica1.png");
 
             BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
@@ -60,7 +60,7 @@ public class readAndWrite {
         try {
 
             // run the Unix "ps -ef" command
-            Process p = Runtime.getRuntime().exec("nohup display /home/angel/grafica1.png");
+            Process p = Runtime.getRuntime().exec("nohup display grafica1.png");
 
             BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
