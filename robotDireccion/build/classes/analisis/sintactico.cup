@@ -1,8 +1,17 @@
 package analisis;
 
 import java_cup.runtime.*;
+import robotdireccion.RobotDireccion;
+import errores.InputsVaciosException;
 
 parser code {:
+	RobotDireccion robot;
+	int contador = 0;
+
+	public sintactico(Lexer lex, RobotDireccion robot){
+		super(lex);
+		this.robot = robot;
+	}
 
 	public void syntax_error(Symbol cur_token) {
 		String message = "Estructura invalida en posición " + cur_token.right
@@ -12,6 +21,9 @@ parser code {:
 		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
 
+	public void sendError(String text) throws InputsVaciosException{
+		throw new InputsVaciosException(text);
+	}
 
 :}
 
@@ -27,12 +39,15 @@ start with S;
 S 	::= D:e 			{: System.out.println("La posicion final del Robot es X: " + e.posX + " la posicion en Y: " + e.posY); :}
 		;
 
-D	::= D:e1 K:e2 		{: RESULT = new posicion(e1.posX + e2.posX, e1.posY + e2.posY); 
+D	::= D:e1 K:e2 		{: RESULT = new posicion(e1.posX + e2.posX, e1.posY + e2.posY); contador++; 
+						robot.addStep(contador,(e1.posX + e2.posX),(e1.posY + e2.posY));
 						System.out.println("Posicion actual X: "+ (e1.posX + e2.posX) +", Y: "+ (e1.posY + e2.posY));:}
+		| D:e error 	{: sendError("Error luego de la posicion X:"+ (e.posX) +", Y: "+ (e.posY)); :} 	
+		| error:e		{: sendError("Error:"+ e); :} 
 		;
 
-D 	::= Comienza K:e 	{: RESULT = new posicion((0 + e.posX),(0 + e.posY)); 
-						System.out.println("Posicion actual X: "+ e.posX +", Y: "+ e.posY);:}
+D 	::= Comienza K:e 	{: robot.addStep(contador,0,0); RESULT = new posicion((0 + e.posX),(0 + e.posY)); contador++;
+						System.out.println("Posicion actual X: "+ e.posX +", Y: "+ e.posY); robot.addStep(contador,e.posX,e.posY); :}
 		;
 
 K	::= Oeste 			{:RESULT = new posicion(-1, 0); 	System.out.println("Oeste");:}

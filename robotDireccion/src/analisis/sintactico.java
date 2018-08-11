@@ -4,9 +4,9 @@
 package analisis;
 
 import java_cup.runtime.*;
-import Graph.Graphs;
-import java_cup.runtime.XMLElement;
 import robotdireccion.RobotDireccion;
+import errores.InputsVaciosException;
+import java_cup.runtime.XMLElement;
 
 /**
  * CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -46,9 +46,10 @@ public class sintactico extends java_cup.runtime.lr_parser {
      */
     protected static final short _production_table[][]
             = unpackFromStrings(new String[]{
-        "\000\010\000\002\002\004\000\002\002\003\000\002\003"
-        + "\004\000\002\003\004\000\002\004\003\000\002\004\003"
-        + "\000\002\004\003\000\002\004\003"});
+        "\000\012\000\002\002\004\000\002\002\003\000\002\003"
+        + "\004\000\002\003\004\000\002\003\003\000\002\003\004"
+        + "\000\002\004\003\000\002\004\003\000\002\004\003\000"
+        + "\002\004\003"});
 
     /**
      * Access to production table.
@@ -62,17 +63,20 @@ public class sintactico extends java_cup.runtime.lr_parser {
      */
     protected static final short[][] _action_table
             = unpackFromStrings(new String[]{
-        "\000\013\000\004\004\005\001\002\000\004\002\015\001"
-        + "\002\000\012\005\011\006\010\007\012\010\013\001\002"
-        + "\000\014\002\000\005\011\006\010\007\012\010\013\001"
-        + "\002\000\014\002\uffff\005\uffff\006\uffff\007\uffff\010\uffff"
-        + "\001\002\000\014\002\ufffc\005\ufffc\006\ufffc\007\ufffc\010"
-        + "\ufffc\001\002\000\014\002\ufffd\005\ufffd\006\ufffd\007\ufffd"
-        + "\010\ufffd\001\002\000\014\002\ufffb\005\ufffb\006\ufffb\007"
-        + "\ufffb\010\ufffb\001\002\000\014\002\ufffa\005\ufffa\006\ufffa"
-        + "\007\ufffa\010\ufffa\001\002\000\014\002\ufffe\005\ufffe\006"
-        + "\ufffe\007\ufffe\010\ufffe\001\002\000\004\002\001\001\002"
-        + ""});
+        "\000\015\000\006\003\004\004\006\001\002\000\016\002"
+        + "\ufffd\003\ufffd\005\ufffd\006\ufffd\007\ufffd\010\ufffd\001\002"
+        + "\000\004\002\017\001\002\000\012\005\013\006\011\007"
+        + "\015\010\014\001\002\000\016\002\000\003\012\005\013"
+        + "\006\011\007\015\010\014\001\002\000\016\002\uffff\003"
+        + "\uffff\005\uffff\006\uffff\007\uffff\010\uffff\001\002\000\016"
+        + "\002\ufffa\003\ufffa\005\ufffa\006\ufffa\007\ufffa\010\ufffa\001"
+        + "\002\000\016\002\ufffe\003\ufffe\005\ufffe\006\ufffe\007\ufffe"
+        + "\010\ufffe\001\002\000\016\002\ufffb\003\ufffb\005\ufffb\006"
+        + "\ufffb\007\ufffb\010\ufffb\001\002\000\016\002\ufff8\003\ufff8"
+        + "\005\ufff8\006\ufff8\007\ufff8\010\ufff8\001\002\000\016\002"
+        + "\ufff9\003\ufff9\005\ufff9\006\ufff9\007\ufff9\010\ufff9\001\002"
+        + "\000\016\002\ufffc\003\ufffc\005\ufffc\006\ufffc\007\ufffc\010"
+        + "\ufffc\001\002\000\004\002\001\001\002"});
 
     /**
      * Access to parse-action table.
@@ -85,11 +89,11 @@ public class sintactico extends java_cup.runtime.lr_parser {
      */
     protected static final short[][] _reduce_table
             = unpackFromStrings(new String[]{
-        "\000\013\000\006\002\003\003\005\001\001\000\002\001"
-        + "\001\000\004\004\013\001\001\000\004\004\006\001\001"
-        + "\000\002\001\001\000\002\001\001\000\002\001\001\000"
+        "\000\015\000\006\002\004\003\006\001\001\000\002\001"
+        + "\001\000\002\001\001\000\004\004\015\001\001\000\004"
+        + "\004\007\001\001\000\002\001\001\000\002\001\001\000"
         + "\002\001\001\000\002\001\001\000\002\001\001\000\002"
-        + "\001\001"});
+        + "\001\001\000\002\001\001\000\002\001\001"});
 
     /**
      * Access to <code>reduce_goto</code> table.
@@ -157,12 +161,15 @@ public class sintactico extends java_cup.runtime.lr_parser {
         this.robot = robot;
     }
 
-    public void syntax_error(Symbol cur_token) {
-        String message = "Estructura invalida en posición " + cur_token.right
-                + ", token: " + cur_token.value;
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");
-        System.out.println(message);
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    /*public void syntax_error(Symbol cur_token) {
+		String message = "Estructura invalida en posición " + cur_token.right
+			 + ", token: " + cur_token.value;
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");
+		System.out.println(message);
+		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}*/
+    public void sendError(String text) throws InputsVaciosException {
+        throw new InputsVaciosException(text);
     }
 
     /**
@@ -239,13 +246,37 @@ public class sintactico extends java_cup.runtime.lr_parser {
                 return CUP$sintactico$result;
 
                 /*. . . . . . . . . . . . . . . . . . . .*/
-                case 3: // D ::= Comienza K
+                case 3: // D ::= D error
+                {
+                    posicion RESULT = null;
+                    int eleft = ((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top - 1)).left;
+                    int eright = ((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top - 1)).right;
+                    posicion e = (posicion) ((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top - 1)).value;
+                    sendError("Error luego de la posicion X:" + (e.posX) + ", Y: " + (e.posY));
+                    CUP$sintactico$result = parser.getSymbolFactory().newSymbol("D", 1, ((java_cup.runtime.Symbol) CUP$sintactico$stack.elementAt(CUP$sintactico$top - 1)), ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()), RESULT);
+                }
+                return CUP$sintactico$result;
+
+                /*. . . . . . . . . . . . . . . . . . . .*/
+                case 4: // D ::= error
+                {
+                    posicion RESULT = null;
+                    int eleft = ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).left;
+                    int eright = ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).right;
+                    Object e = (Object) ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value;
+                    sendError("Error:" + e);
+                    CUP$sintactico$result = parser.getSymbolFactory().newSymbol("D", 1, ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()), ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()), RESULT);
+                }
+                return CUP$sintactico$result;
+
+                /*. . . . . . . . . . . . . . . . . . . .*/
+                case 5: // D ::= Comienza K
                 {
                     posicion RESULT = null;
                     int eleft = ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).left;
                     int eright = ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).right;
                     posicion e = (posicion) ((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value;
-                    robot.addInicio(contador, 0, 0);
+                    robot.addStep(contador, 0, 0);
                     RESULT = new posicion((0 + e.posX), (0 + e.posY));
                     contador++;
                     System.out.println("Posicion actual X: " + e.posX + ", Y: " + e.posY);
@@ -255,7 +286,7 @@ public class sintactico extends java_cup.runtime.lr_parser {
                 return CUP$sintactico$result;
 
                 /*. . . . . . . . . . . . . . . . . . . .*/
-                case 4: // K ::= Oeste
+                case 6: // K ::= Oeste
                 {
                     posicion RESULT = null;
                     RESULT = new posicion(-1, 0);
@@ -265,7 +296,7 @@ public class sintactico extends java_cup.runtime.lr_parser {
                 return CUP$sintactico$result;
 
                 /*. . . . . . . . . . . . . . . . . . . .*/
-                case 5: // K ::= Este
+                case 7: // K ::= Este
                 {
                     posicion RESULT = null;
                     RESULT = new posicion(1, 0);
@@ -275,7 +306,7 @@ public class sintactico extends java_cup.runtime.lr_parser {
                 return CUP$sintactico$result;
 
                 /*. . . . . . . . . . . . . . . . . . . .*/
-                case 6: // K ::= Sur
+                case 8: // K ::= Sur
                 {
                     posicion RESULT = null;
                     RESULT = new posicion(0, -1);
@@ -285,7 +316,7 @@ public class sintactico extends java_cup.runtime.lr_parser {
                 return CUP$sintactico$result;
 
                 /*. . . . . . . . . . . . . . . . . . . .*/
-                case 7: // K ::= Norte
+                case 9: // K ::= Norte
                 {
                     posicion RESULT = null;
                     RESULT = new posicion(0, 1);
@@ -303,6 +334,7 @@ public class sintactico extends java_cup.runtime.lr_parser {
         }
 
         /* end of method */
+
         /**
          * Method splitting the generated action code into several parts.
          */
