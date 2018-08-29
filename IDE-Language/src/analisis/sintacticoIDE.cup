@@ -1,0 +1,124 @@
+package analisis;
+
+import java_cup.runtime.*;
+
+parser code {:
+
+	public void syntax_error(Symbol cur_token) {
+		String message = "Estructura invalida en posición " + cur_token.right
+			 + ", token: " + cur_token.value;
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");	 
+		System.out.println(message);
+		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+:}
+
+/* Terminal */
+terminal String NamInt, NamFloat, NamBoolean, NamString, NamMain, NamIf, NamWhile;
+terminal String PrintN, PrintS, BreakCom, Mas, Menos, Por, Div, Mayor, Menor, Igual, And;
+terminal String Or, Asignacion, EndCom, ParAbierto, ParCerrado, Coma, Boolean, Cadena;
+terminal String Entero, Decimal, Identificador, NamElse, Diferente, CorCerrado, CorAbierto;
+
+/* Non terminal */
+non terminal String CODIGO, CUERPO_CODIGO, MAIN_IDE, MAIN_BODY, MAIN_FUNCION, DECLARACION_VAR;
+non terminal String ID_VAR, OPERACION, DECLARACION_STRING, ID_STRING, CONCATENAR, IF_ELSE;
+non terminal String IF_ELSE_FUNCION, INSIDE_CODE, WHILE_FUNCION, PRINT_FUNCION, PRINT_OPTION;
+
+/*Precedence*/
+precedence left ParAbierto, ParCerrado;
+precedence left Mas, Menos;
+precedence left Por, Div;
+precedence left Menor, Mayor;
+precedence left Igual, Diferente;
+precedence left And, Or;
+
+//start with DECLARACION_VAR;
+
+start with CODIGO;
+
+CODIGO 				::=	CODIGO CUERPO_CODIGO
+						| CUERPO_CODIGO
+						| CUERPO_CODIGO MAIN_IDE CorCerrado
+						| MAIN_IDE CorCerrado	
+						;
+
+CUERPO_CODIGO		::=	DECLARACION_VAR EndCom
+						| DECLARACION_STRING EndCom
+						;
+
+MAIN_IDE			::=	NamMain ParAbierto ParCerrado CorAbierto MAIN_BODY
+						;
+
+MAIN_BODY			::=	MAIN_BODY MAIN_FUNCION
+						| MAIN_FUNCION
+						;
+
+MAIN_FUNCION		::=	IF_ELSE_FUNCION 
+						| PRINT_FUNCION
+						| WHILE_FUNCION
+						| DECLARACION_VAR EndCom
+						| DECLARACION_STRING EndCom
+						| ID_VAR EndCom
+						| ID_STRING EndCom
+						| BreakCom EndCom
+						;
+
+DECLARACION_VAR		::=	DECLARACION_VAR Coma ID_VAR
+						| NamInt ID_VAR
+						| NamBoolean ID_VAR
+						| NamFloat ID_VAR
+						;
+
+ID_VAR				::=	Identificador
+						| Identificador Asignacion OPERACION
+						;
+
+OPERACION			::=	OPERACION Mas OPERACION
+						| OPERACION Menos OPERACION
+						| OPERACION Por OPERACION
+						| OPERACION Div OPERACION
+						| OPERACION Menor OPERACION
+						| OPERACION Mayor OPERACION
+						| OPERACION Igual OPERACION
+						| OPERACION Diferente OPERACION
+						| OPERACION Or OPERACION
+						| OPERACION And OPERACION
+						| ParAbierto OPERACION ParCerrado
+						| Entero
+						| Decimal
+						| Identificador
+						| Boolean
+						;
+
+DECLARACION_STRING	::=	DECLARACION_STRING Coma ID_STRING
+						| NamString ID_STRING
+						;
+
+ID_STRING			::=	Identificador Asignacion CONCATENAR
+						;
+
+CONCATENAR			::= CONCATENAR Mas Cadena
+						| CONCATENAR Mas OPERACION
+						| Cadena
+						;
+
+IF_ELSE_FUNCION		::= IF_ELSE
+						| IF_ELSE NamElse INSIDE_CODE
+						;
+
+IF_ELSE 			::= IF_ELSE NamElse NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE
+						| NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE
+						;
+
+INSIDE_CODE			::= CorAbierto MAIN_BODY CorCerrado
+						;
+
+WHILE_FUNCION		::= NamWhile ParAbierto OPERACION ParCerrado INSIDE_CODE
+						;
+
+PRINT_FUNCION		::= PRINT_OPTION ParAbierto CONCATENAR ParCerrado EndCom
+						;
+
+PRINT_OPTION		::= PrintN
+						| PrintS
+						;
