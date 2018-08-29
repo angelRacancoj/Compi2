@@ -17,6 +17,7 @@ public class languageConstants {
     public final int STRING_AUX = 3;
 
     /*Data type*/
+    public final String NO_TYPE = "Dont have type";
     public final int INTEGER = 1;
     public final int FLOAT = 2;
     public final int BOOLEAN = 3;
@@ -51,4 +52,8 @@ public class languageConstants {
     public final int DIFERENTE = 4;
     public final int AND = 5;
     public final int OR = 6;
+
+    public boolean isInteger(double variable) {
+        return ((variable == Math.floor(variable)) && !Double.isInfinite(variable));
+    }
 }

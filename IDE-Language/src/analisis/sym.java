@@ -17,6 +17,7 @@ public class sym {
   public static final int And = 19;
   public static final int PrintN = 9;
   public static final int Identificador = 30;
+  public static final int Booleano = 26;
   public static final int NamString = 5;
   public static final int CorCerrado = 33;
   public static final int Coma = 25;
@@ -41,7 +42,6 @@ public class sym {
   public static final int Diferente = 32;
   public static final int NamBoolean = 4;
   public static final int CorAbierto = 34;
-  public static final int Boolean = 26;
   public static final int ParCerrado = 24;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -70,7 +70,7 @@ public class sym {
   "ParAbierto",
   "ParCerrado",
   "Coma",
-  "Boolean",
+  "Booleano",
   "Cadena",
   "Entero",
   "Decimal",

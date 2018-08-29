@@ -15,6 +15,8 @@ public class variableObject {
     float valueF;
     String valueS;
     boolean valueB;
+    double valueTemp;
+    int tempType;
     String id;
     dataType type;
     int category;
@@ -79,6 +81,31 @@ public class variableObject {
         this.category = category;
     }
 
+    /**
+     * this method is temporal to take up the variable
+     *
+     * @param valueTemp
+     * @param tempType
+     * @param id
+     */
+    public variableObject(double valueTemp, int tempType, String id) {
+        this.valueTemp = valueTemp;
+        this.tempType = tempType;
+        this.id = id;
+    }
+
+    public variableObject(boolean valueB, int tempType, String id) {
+        this.valueB = valueB;
+        this.tempType = tempType;
+        this.id = id;
+    }
+
+    public variableObject(String valueS, int tempType, String id) {
+        this.valueS = valueS;
+        this.tempType = tempType;
+        this.id = id;
+    }
+
     public int getValueI() {
         return valueI;
     }
@@ -133,6 +160,22 @@ public class variableObject {
 
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    public double getValueTemp() {
+        return valueTemp;
+    }
+
+    public void setValueTemp(double valueTemp) {
+        this.valueTemp = valueTemp;
+    }
+
+    public int getTempType() {
+        return tempType;
+    }
+
+    public void setTempType(int tempType) {
+        this.tempType = tempType;
     }
 
 }

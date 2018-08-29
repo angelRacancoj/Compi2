@@ -1,8 +1,20 @@
 package analisis;
 
 import java_cup.runtime.*;
+import analisis.semantic.*;
+import analisis.semanticObjects.*;
+import languageConstants.languageConstants;
 
 parser code {:
+
+	private semanticManager semanticM;
+	private operation ops = new operation();
+	languageConstants languageC = new languageConstants();
+
+	public sintactico(Lexer lex, semanticManager semanticM){
+		super(lex);
+		this.semanticM = semanticM;
+	}
 
 	public void syntax_error(Symbol cur_token) {
 		String message = "Estructura invalida en posición " + cur_token.right
@@ -16,14 +28,16 @@ parser code {:
 /* Terminal */
 terminal String NamInt, NamFloat, NamBoolean, NamString, NamMain, NamIf, NamWhile;
 terminal String PrintN, PrintS, BreakCom, Mas, Menos, Por, Div, Mayor, Menor, Igual, And;
-terminal String Or, Asignacion, EndCom, ParAbierto, ParCerrado, Coma, Boolean, Cadena;
+terminal String Or, Asignacion, EndCom, ParAbierto, ParCerrado, Coma, Booleano, Cadena;
 terminal String Entero, Decimal, Identificador, NamElse, Diferente, CorCerrado, CorAbierto;
 
 /* Non terminal */
-non terminal String CODIGO, CUERPO_CODIGO, MAIN_IDE, MAIN_BODY, MAIN_FUNCION, DECLARACION_VAR;
-non terminal String ID_VAR, OPERACION, DECLARACION_STRING, ID_STRING, CONCATENAR, IF_ELSE;
+non terminal String CODIGO, CUERPO_CODIGO, MAIN_IDE, MAIN_BODY, MAIN_FUNCION;
+non terminal String IF_ELSE;
 non terminal String IF_ELSE_FUNCION, INSIDE_CODE, WHILE_FUNCION, PRINT_FUNCION, PRINT_OPTION;
-
+non terminal noDefine OPERACION, CONCATENAR;
+non terminal variableObject ID_VAR, ID_STRING;
+non terminal Integer DECLARACION_STRING, DECLARACION_VAR; 
 /*Precedence*/
 precedence left ParAbierto, ParCerrado;
 precedence left Mas, Menos;
@@ -36,89 +50,89 @@ precedence left And, Or;
 
 start with CODIGO;
 
-CODIGO 				::=	CODIGO CUERPO_CODIGO
-						| CUERPO_CODIGO
-						| CUERPO_CODIGO MAIN_IDE CorCerrado
-						| MAIN_IDE CorCerrado	
+CODIGO 				::=	CODIGO CUERPO_CODIGO					{: :}
+						| CUERPO_CODIGO							{: :}
+						| CUERPO_CODIGO MAIN_IDE CorCerrado		{: :}
+						| MAIN_IDE CorCerrado					{: :}
 						;
 
-CUERPO_CODIGO		::=	DECLARACION_VAR EndCom
-						| DECLARACION_STRING EndCom
+CUERPO_CODIGO		::=	DECLARACION_VAR EndCom		{: :}
+						| DECLARACION_STRING EndCom	{: :}
 						;
 
-MAIN_IDE			::=	NamMain ParAbierto ParCerrado CorAbierto MAIN_BODY
+MAIN_IDE			::=	NamMain ParAbierto ParCerrado CorAbierto MAIN_BODY	{: :}
 						;
 
-MAIN_BODY			::=	MAIN_BODY MAIN_FUNCION
-						| MAIN_FUNCION
+MAIN_BODY			::=	MAIN_BODY MAIN_FUNCION	{: :}
+						| MAIN_FUNCION			{: :}
 						;
 
-MAIN_FUNCION		::=	IF_ELSE_FUNCION 
-						| PRINT_FUNCION
-						| WHILE_FUNCION
-						| DECLARACION_VAR EndCom
-						| DECLARACION_STRING EndCom
-						| ID_VAR EndCom
-						| ID_STRING EndCom
-						| BreakCom EndCom
+MAIN_FUNCION		::=	IF_ELSE_FUNCION 				{: :}
+						| PRINT_FUNCION					{: :}
+						| WHILE_FUNCION					{: :}
+						| DECLARACION_VAR EndCom		{: :}
+						| DECLARACION_STRING EndCom		{: :}
+						| ID_VAR EndCom					{: :}
+						| ID_STRING EndCom				{: :}
+						| BreakCom EndCom				{: :}
 						;
 
-DECLARACION_VAR		::=	DECLARACION_VAR Coma ID_VAR
-						| NamInt ID_VAR
-						| NamBoolean ID_VAR
-						| NamFloat ID_VAR
+DECLARACION_VAR		::=	DECLARACION_VAR:e1 Coma ID_VAR:e2	{: semanticM.addVariableToList(e1, e2); RESULT = e1; :}
+						| NamInt ID_VAR:e					{: semanticM.addVariableToList(languageC.INTEGER, e); RESULT = languageC.INTEGER; :}
+						| NamBoolean ID_VAR:e				{: semanticM.addVariableToList(languageC.BOOLEAN, e); RESULT = languageC.BOOLEAN; :}
+						| NamFloat ID_VAR:e					{: semanticM.addVariableToList(languageC.FLOAT, e); RESULT = languageC.FLOAT; :}
 						;
 
-ID_VAR				::=	Identificador
-						| Identificador Asignacion OPERACION
+ID_VAR				::=	Identificador:e								{: RESULT = ops.tempVar(e, null); :}
+						| Identificador:e1 Asignacion OPERACION:e2 	{: RESULT = ops.tempVar(e1, e2); :}
 						;
 
-OPERACION			::=	OPERACION Mas OPERACION
-						| OPERACION Menos OPERACION
-						| OPERACION Por OPERACION
-						| OPERACION Div OPERACION
-						| OPERACION Menor OPERACION
-						| OPERACION Mayor OPERACION
-						| OPERACION Igual OPERACION
-						| OPERACION Diferente OPERACION
-						| OPERACION Or OPERACION
-						| OPERACION And OPERACION
-						| ParAbierto OPERACION ParCerrado
-						| Entero
-						| Decimal
-						| Identificador
-						| Boolean
+OPERACION			::=	OPERACION:e1 Mas OPERACION:e2 			{: RESULT = ops.arithmeticOp(languageC.ADD,	e1, e2); :}
+						| OPERACION:e1 Menos OPERACION:e2 		{: RESULT = ops.arithmeticOp(languageC.LESS,e1, e2); :}
+						| OPERACION:e1 Por OPERACION:e2 		{: RESULT = ops.arithmeticOp(languageC.MUL,	e1, e2); :}
+						| OPERACION:e1 Div OPERACION:e2 		{: RESULT = ops.arithmeticOp(languageC.DIV,	e1, e2); :}
+						| OPERACION:e1 Menor OPERACION:e2 		{: RESULT = ops.logicOp(languageC.MENOR_Q, 	e1, e2); :}
+						| OPERACION:e1 Mayor OPERACION:e2 		{: RESULT = ops.logicOp(languageC.MAYOR_Q, 	e1, e2); :}
+						| OPERACION:e1 Igual OPERACION:e2 		{: RESULT = ops.logicOp(languageC.IGUAL, 	e1, e2); :}
+						| OPERACION:e1 Diferente OPERACION:e2 	{: RESULT = ops.logicOp(languageC.DIFERENTE, e1, e2); :}
+						| OPERACION:e1 Or OPERACION:e2 			{: RESULT = ops.logicOp(languageC.OR, 		e1, e2); :}
+						| OPERACION:e1 And OPERACION:e2			{: RESULT = ops.logicOp(languageC.AND, 		e1, e2); :}
+						| ParAbierto OPERACION:e ParCerrado		{: RESULT = e; :}
+						| Entero:e								{: RESULT =  new noDefine(Double.parseDouble(e), languageC.DOUBLE_AUX); :}
+						| Decimal:e								{: RESULT =  new noDefine(Double.parseDouble(e), languageC.DOUBLE_AUX); :}
+						| Identificador:e 						{: RESULT = semanticM.returnNoDefineObject(e); :}
+						| Booleano:e 							{: RESULT = new noDefine(Boolean.valueOf(e), languageC.BOOL_AUX); :}
 						;
 
-DECLARACION_STRING	::=	DECLARACION_STRING Coma ID_STRING
-						| NamString ID_STRING
+DECLARACION_STRING	::=	DECLARACION_STRING:e1 Coma ID_STRING:e2	{: semanticM.addVariableToList(e1, e2); RESULT = e1; :}
+						| NamString ID_STRING:e					{: semanticM.addVariableToList(languageC.STRING, e); RESULT = languageC.STRING; :}
 						;
 
-ID_STRING			::=	Identificador Asignacion CONCATENAR
+ID_STRING			::=	Identificador:e1 Asignacion CONCATENAR:e2	{: RESULT = ops.tempVar(e1, e2); :}
 						;
 
-CONCATENAR			::= CONCATENAR Mas Cadena
-						| CONCATENAR Mas OPERACION
-						| Cadena
+CONCATENAR			::= CONCATENAR:e1 Mas Cadena:e2			{: RESULT = ops.stringOp(e1, new noDefine(e2, languageC.STRING_AUX)); :}
+						| CONCATENAR:e1 Mas OPERACION:e2 	{: RESULT = ops.stringOp(e1, e2); :}
+						| Cadena:e	 						{: RESULT = new noDefine(e, languageC.STRING_AUX); :}
 						;
 
-IF_ELSE_FUNCION		::= IF_ELSE
-						| IF_ELSE NamElse INSIDE_CODE
+IF_ELSE_FUNCION		::= IF_ELSE 						{: :}
+						| IF_ELSE NamElse INSIDE_CODE	{: :}
 						;
 
-IF_ELSE 			::= IF_ELSE NamElse NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE
-						| NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE
+IF_ELSE 			::= IF_ELSE NamElse NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE 	{: :}
+						| NamIf ParAbierto OPERACION ParCerrado INSIDE_CODE					{: :}
 						;
 
-INSIDE_CODE			::= CorAbierto MAIN_BODY CorCerrado
+INSIDE_CODE			::= CorAbierto MAIN_BODY CorCerrado		{: :}
 						;
 
-WHILE_FUNCION		::= NamWhile ParAbierto OPERACION ParCerrado INSIDE_CODE
+WHILE_FUNCION		::= NamWhile ParAbierto OPERACION ParCerrado INSIDE_CODE 	{: :}
 						;
 
-PRINT_FUNCION		::= PRINT_OPTION ParAbierto CONCATENAR ParCerrado EndCom
+PRINT_FUNCION		::= PRINT_OPTION ParAbierto CONCATENAR ParCerrado EndCom	{: :}
 						;
 
-PRINT_OPTION		::= PrintN
-						| PrintS
+PRINT_OPTION		::= PrintN 		{: :}
+						| PrintS	{: :}
 						;
