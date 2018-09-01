@@ -18,7 +18,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 entero = [-]? [:digit:]+
 decimal = entero [.][:digit:]+
 cadena = "\"" [^*] ~"\""
-identificador = [_]? [:jletter:]([:jletterdigit:] | [_])*
+identificador = ([_]|[:jletter:])([:jletterdigit:] | [_])*
 boolID = "true" | "false"
 
 

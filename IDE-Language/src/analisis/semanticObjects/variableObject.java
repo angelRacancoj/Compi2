@@ -5,6 +5,8 @@
  */
 package analisis.semanticObjects;
 
+import languageConstants.languageConstants;
+
 /**
  *
  * @author angel
@@ -20,6 +22,8 @@ public class variableObject {
     String id;
     dataType type;
     int category;
+
+    languageConstants languageC = new languageConstants();
 
     /**
      * This method is to create a Integer object
@@ -79,6 +83,38 @@ public class variableObject {
         this.id = id;
         this.type = type;
         this.category = category;
+    }
+
+    public void printVar() {
+        if (this.type.nameData == languageC.INTEGER) {
+            printIntegerVar();
+        } else if (this.type.nameData == languageC.FLOAT) {
+            printFloatVar();
+        } else if (this.type.nameData == languageC.STRING) {
+            printStringVar();
+        } else if (this.type.nameData == languageC.BOOLEAN) {
+            printBoolVar();
+        }
+    }
+
+    private void printIntegerVar() {
+        System.out.println("Valor " + this.valueI + ", id: " + this.id
+                + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private void printFloatVar() {
+        System.out.println("Valor " + this.valueF + ", id: " + this.id
+                + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private void printStringVar() {
+        System.out.println("Valor " + this.valueS + ", id: " + this.id
+                + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private void printBoolVar() {
+        System.out.println("Valor " + this.valueB + ", id: " + this.id
+                + " Tipo: " + getTypeName() + " Category " + this.category);
     }
 
     /**
@@ -148,6 +184,20 @@ public class variableObject {
 
     public dataType getType() {
         return type;
+    }
+
+    public String getTypeName() {
+        if (this.type.nameData == languageC.INTEGER) {
+            return languageC.INTEGER_NAME;
+        } else if (this.type.nameData == languageC.FLOAT) {
+            return languageC.FLOAT_NAME;
+        } else if (this.type.nameData == languageC.STRING) {
+            return languageC.STRING_NAME;
+        } else if (this.type.nameData == languageC.BOOLEAN) {
+            return languageC.BOOLEAN_NAME;
+        } else {
+            return "";
+        }
     }
 
     public void setType(dataType type) {

@@ -8,6 +8,7 @@ package analisis.semantic;
 import analisis.semanticObjects.noDefine;
 import analisis.semanticObjects.variableObject;
 import exceptions.InputsVaciosException;
+import java.util.LinkedList;
 import languageConstants.languageConstants;
 
 /**
@@ -17,6 +18,9 @@ import languageConstants.languageConstants;
 public class operation {
 
     languageConstants languageC = new languageConstants();
+    public LinkedList<String> threeDirctionsAll = new LinkedList<>();
+    private LinkedList<String> temp3Dir = new LinkedList<>();
+    private int contador = 0;
 
     /**
      * add to different objects to be print
@@ -33,7 +37,7 @@ public class operation {
         if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
             return new noDefine((String.valueOf(dato1.getValueD()) + dato2.isValueB()), languageC.STRING_AUX);
         } else if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine(dato1.getValueD() + dato2.getValueS(), languageC.STRING_AUX);
+            return new noDefine(dato1.getValueD() + dato2.getValueS().replaceAll("\"", ""), languageC.STRING_AUX);
 
         } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
             return new noDefine((dato1.getValueD() + String.valueOf(dato2.getValueD())), languageC.STRING_AUX);
@@ -42,16 +46,16 @@ public class operation {
             return new noDefine((String.valueOf(dato1.isValueB()) + String.valueOf(dato2.isValueB())), languageC.STRING_AUX);
 
         } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine((dato1.isValueB() + dato2.getValueS()), languageC.STRING_AUX);
+            return new noDefine((dato1.isValueB() + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX);
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-            return new noDefine((dato1.getValueS() + dato2.getValueD()), languageC.STRING_AUX);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.getValueD()), languageC.STRING_AUX);
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-            return new noDefine((dato1.getValueS() + dato2.isValueB()), languageC.STRING_AUX);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.isValueB()), languageC.STRING_AUX);
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine((dato1.getValueS() + dato2.getValueS()), languageC.STRING_AUX);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX);
 
         } else {
             throw new InputsVaciosException("Los datos no se pueden imprimir juntos");

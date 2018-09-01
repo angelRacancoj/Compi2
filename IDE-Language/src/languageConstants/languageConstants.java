@@ -22,6 +22,10 @@ public class languageConstants {
     public final int FLOAT = 2;
     public final int BOOLEAN = 3;
     public final int STRING = 4;
+    public final String INTEGER_NAME = "Integer";
+    public final String FLOAT_NAME = "Float";
+    public final String BOOLEAN_NAME = "Boolean";
+    public final String STRING_NAME = "String";
 
     /*Dimensions*/
     public final int FIRST_DIMESION = 1;
@@ -54,6 +58,7 @@ public class languageConstants {
     public final int OR = 6;
 
     public boolean isInteger(double variable) {
-        return ((variable == Math.floor(variable)) && !Double.isInfinite(variable));
+        return (variable == (int) variable);
+//        return ((variable == Math.floor(variable)) && !Double.isInfinite(variable));
     }
 }

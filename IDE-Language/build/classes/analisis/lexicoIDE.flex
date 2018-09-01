@@ -18,7 +18,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 entero = [-]? [:digit:]+
 decimal = entero [.][:digit:]+
 cadena = "\"" [^*] ~"\""
-identificador = [:jletter:]([:jletterdigit:] | [-] | [_])*
+identificador = ([_]|[:jletter:])([:jletterdigit:] | [_])*
 boolID = "true" | "false"
 
 
@@ -74,7 +74,7 @@ boolID = "true" | "false"
 	"(" 				{imprimirToken(yytext()); return symbol(sym.ParAbierto, 	yytext());}
 	")" 				{imprimirToken(yytext()); return symbol(sym.ParCerrado, 	yytext());}
 	"," 				{imprimirToken(yytext()); return symbol(sym.Coma, 			yytext());}
-	{boolID}		 	{imprimirToken(yytext()); return symbol(sym.Boolean,		yytext());}
+	{boolID}		 	{imprimirToken(yytext()); return symbol(sym.Booleano,		yytext());}
 	{entero} 			{imprimirToken(yytext()); return symbol(sym.Entero, 		yytext());}
 	{decimal} 			{imprimirToken(yytext()); return symbol(sym.Decimal, 		yytext());}
 	{cadena} 			{imprimirToken(yytext()); return symbol(sym.Cadena,		 	yytext());}

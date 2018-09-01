@@ -5,6 +5,8 @@
  */
 package ide.language;
 
+import GUI.Principal;
+
 /**
  *
  * @author angel
@@ -16,7 +18,8 @@ public class IDELanguage {
      */
     public static void main(String[] args) {
 
-        System.out.println("hola " + true + false);
+        Principal principal = new Principal();
+        principal.setVisible(true);
     }
 
 }
