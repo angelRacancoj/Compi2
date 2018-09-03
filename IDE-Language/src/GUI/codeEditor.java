@@ -6,6 +6,7 @@
 package GUI;
 
 import analisis.Lexer;
+import analisis.semantic.operation;
 import analisis.semantic.semanticManager;
 import analisis.sintactico;
 import files.ManejadorArchivo;
@@ -29,6 +30,7 @@ public class codeEditor extends javax.swing.JPanel {
     TextLineNumber textLine;
     LinkedList<String> errors = new LinkedList<>();
     semanticManager semanticM;
+    operation ops;
 
     Lexer lex;
     sintactico sintact;
@@ -40,9 +42,10 @@ public class codeEditor extends javax.swing.JPanel {
      */
     public codeEditor(String path) {
         semanticM = new semanticManager();
+        ops = new operation();
 
         this.lex = new Lexer(new StringReader(""));
-        this.sintact = new sintactico(lex, semanticM);
+        this.sintact = new sintactico(lex, semanticM, ops);
 
         filesManager = new ManejadorArchivo();
         this.path = path;

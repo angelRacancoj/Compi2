@@ -40,35 +40,41 @@ public class semanticManager {
      * return an already created Variable inside of variablesList.
      *
      * @param id
+     * @param row
+     * @param column
      * @return
      * @throws InputsVaciosException
      */
-    public noDefine returnNoDefineObject(String id) throws InputsVaciosException {
+    public noDefine returnNoDefineObject(String id, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj != null) {
             if (varObj.getCategory() == languageC.INTEGER) {
-                return new noDefine(varObj.getValueI(), languageC.DOUBLE_AUX);
+                return new noDefine(varObj.getValueI(), languageC.DOUBLE_AUX, row, column, id);
+
             } else if (varObj.getCategory() == languageC.FLOAT) {
-                return new noDefine(varObj.getValueF(), languageC.DOUBLE_AUX);
+                return new noDefine(varObj.getValueF(), languageC.DOUBLE_AUX, row, column, id);
+
             } else if (varObj.getCategory() == languageC.BOOLEAN) {
-                Boolean.valueOf("true");
-                return new noDefine(varObj.isValueB(), languageC.BOOL_AUX);
+                return new noDefine(varObj.isValueB(), languageC.BOOL_AUX, row, column, id);
+
             } else if (varObj.getCategory() == languageC.STRING) {
-                return new noDefine(varObj.getValueS(), languageC.STRING_AUX);
+                return new noDefine(varObj.getValueS(), languageC.STRING_AUX, row, column, id);
+
             } else {
                 throw new InputsVaciosException("No existe el tipo de dato indicado");
             }
         } else {
-            throw new InputsVaciosException("No existe la variable >>> " + id + " <<<");
+            throw new InputsVaciosException("No existe la variable >>> " + id + " <<< Fila: " + row + " Columna: " + column);
         }
     }
 
     /**
      *
      * @param var
+     * @param row
      * @throws InputsVaciosException
      */
-    public void modifyValue(variableObject var) throws InputsVaciosException {
+    public void modifyValue(variableObject var, int row) throws InputsVaciosException {
         variableObject varFound = findVariable(var.getId());
 
         if (varFound != null) {
@@ -82,13 +88,13 @@ public class semanticManager {
                 } else if (varFound.getType().getNameData() == languageC.FLOAT) {
                     varFound.setValueF((float) var.getValueTemp());
                 } else {
-                    throw new InputsVaciosException("Tipo de dato incompatible");
+                    throw new InputsVaciosException("Tipo de dato incompatible, Linea " + row);
                 }
             } else {
-                throw new InputsVaciosException("No existe la variable el tipo de dato indicado " + var.getTempType());
+                throw new InputsVaciosException("No existe la variable " + var.getId() + " el tipo de dato indicado " + var.getTempType());
             }
         } else {
-            throw new InputsVaciosException("No existe la variable >>> " + var.getId() + " <<<");
+            throw new InputsVaciosException("No existe la variable >>> " + var.getId() + " <<< Linea: " + row);
 
         }
     }
@@ -97,35 +103,37 @@ public class semanticManager {
      *
      * @param type
      * @param var
+     * @param row
+     * @param column
      * @throws InputsVaciosException
      */
-    public void addVariableToList(int type, variableObject var) throws InputsVaciosException {
+    public void addVariableToList(int type, variableObject var, int row, int column) throws InputsVaciosException {
         if ((type == languageC.INTEGER) && (var.getTempType() == languageC.DOUBLE_AUX)) {
             if (languageC.isInteger(var.getValueTemp())) {
-                addVariableToListInt(type, var.getId(), (int) var.getValueTemp());
+                addVariableToListInt(type, var.getId(), (int) var.getValueTemp(), row, column);
             } else {
-                throw new InputsVaciosException("El valor para >> " + var.getId() + " << no es Integer");
+                throw new InputsVaciosException("El valor para >> " + var.getId() + " << no es Integer Linea: " + row);
             }
         } else if ((type == languageC.FLOAT) && (var.getTempType() == languageC.DOUBLE_AUX)) {
-            addVariableToList(type, var.getId(), (float) var.getValueTemp());
+            addVariableToList(type, var.getId(), (float) var.getValueTemp(), row, column);
         } else if ((type == languageC.BOOLEAN) && (var.getTempType() == languageC.BOOL_AUX)) {
-            addVariableToList(type, var.getId(), var.isValueB());
+            addVariableToList(type, var.getId(), var.isValueB(), row, column);
         } else if ((type == languageC.STRING) && (var.getTempType() == languageC.STRING_AUX)) {
-            addVariableToList(type, var.getId(), var.getValueS());
+            addVariableToList(type, var.getId(), var.getValueS(), row, column);
         } else if (var.getValueS().equals(languageC.NO_TYPE)) {
             if (type == languageC.FLOAT) {
-                addVariableToList(type, var.getId(), 0);
+                addVariableToList(type, var.getId(), 0, row, column);
             } else if ((type == languageC.INTEGER)) {
-                addVariableToListInt(type, var.getId(), 0);
+                addVariableToListInt(type, var.getId(), 0, row, column);
             } else if (type == languageC.BOOLEAN) {
-                addVariableToList(type, var.getId(), true);
+                addVariableToList(type, var.getId(), true, row, column);
             } else if (type == languageC.STRING) {
-                addVariableToList(type, var.getId(), "");
+                addVariableToList(type, var.getId(), "", row, column);
             } else {
-                throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " <<");
+                throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " << Linea: " + row);
             }
         } else {
-            throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " <<");
+            throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " << Linea: " + row);
         }
     }
 
@@ -139,7 +147,7 @@ public class semanticManager {
      * @param category
      * @throws InputsVaciosException
      */
-    private void addVariableToListInt(int type, String id, int value) throws InputsVaciosException {
+    private void addVariableToListInt(int type, String id, int value, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj == null) {
             dataType actualType = findDataType(type);
@@ -147,10 +155,10 @@ public class semanticManager {
                 varList.add(new variableObject(value, id, actualType, languageC.VARIABLE));
                 System.out.println("Float " + id + " valor: " + value);
             } else {
-                throw new InputsVaciosException("No existe el tipo de dato indicado");
+                throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + row);
             }
         } else {
-            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<<");
+            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<< Linea: " + row);
         }
     }
 
@@ -163,7 +171,7 @@ public class semanticManager {
      * @param value
      * @throws InputsVaciosException
      */
-    private void addVariableToList(int type, String id, float value) throws InputsVaciosException {
+    private void addVariableToList(int type, String id, float value, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj == null) {
             dataType actualType = findDataType(type);
@@ -171,10 +179,10 @@ public class semanticManager {
                 varList.add(new variableObject(value, id, actualType, languageC.VARIABLE));
                 System.out.println("Float " + id + " valor: " + value);
             } else {
-                throw new InputsVaciosException("No existe el tipo de dato indicado");
+                throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + row);
             }
         } else {
-            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<<");
+            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<< Linea: " + row);
         }
     }
 
@@ -187,7 +195,7 @@ public class semanticManager {
      * @param value
      * @throws InputsVaciosException
      */
-    private void addVariableToList(int type, String id, String value) throws InputsVaciosException {
+    private void addVariableToList(int type, String id, String value, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj == null) {
             dataType actualType = findDataType(type);
@@ -195,10 +203,10 @@ public class semanticManager {
                 varList.add(new variableObject(value, id, actualType, languageC.VARIABLE));
                 System.out.println("Float " + id + " valor: " + value);
             } else {
-                throw new InputsVaciosException("No existe el tipo de dato indicado");
+                throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + row);
             }
         } else {
-            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<<");
+            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<< Linea: " + row);
         }
     }
 
@@ -211,7 +219,7 @@ public class semanticManager {
      * @param value
      * @throws InputsVaciosException
      */
-    private void addVariableToList(int type, String id, boolean value) throws InputsVaciosException {
+    private void addVariableToList(int type, String id, boolean value, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj == null) {
             dataType actualType = findDataType(type);
@@ -219,10 +227,10 @@ public class semanticManager {
                 varList.add(new variableObject(value, id, actualType, languageC.VARIABLE));
                 System.out.println("Float " + id + " valor: " + value);
             } else {
-                throw new InputsVaciosException("No existe el tipo de dato indicado");
+                throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + row);
             }
         } else {
-            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<<");
+            throw new InputsVaciosException("Ya existe la variable >>> " + id + " <<< Linea: " + row);
         }
     }
 
@@ -235,7 +243,7 @@ public class semanticManager {
         if (var.getNoTypeType() == languageC.BOOL_AUX) {
             System.out.println("Funcion if valida");
         } else {
-            throw new InputsVaciosException("No existe el tipo de dato indicado");
+            throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + var.getRow() + " Columna: " + var.getColumn());
         }
     }
 
@@ -248,7 +256,7 @@ public class semanticManager {
         if (var.getNoTypeType() == languageC.STRING_AUX) {
             System.out.println("Funcion print valida");
         } else {
-            throw new InputsVaciosException("No existe el tipo de dato indicado");
+            throw new InputsVaciosException("No existe el tipo de dato indicado Linea: " + var.getRow() + " Columna: " + var.getColumn());
         }
     }
 

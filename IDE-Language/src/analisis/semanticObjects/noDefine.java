@@ -15,20 +15,125 @@ public class noDefine {
     double valueD;
     String valueS;
     int noTypeType;
+    int row;
+    int column;
+    String name;
 
-    public noDefine(boolean valueB, int noTypeType) {
+    /**
+     * this method is to carrier the "Boolean" value to be operated, is
+     * necessary to add the row and column, it's to show friendly the error
+     *
+     * Doesn't care of the name of the variable
+     *
+     * @param valueB
+     * @param noTypeType
+     * @param row
+     * @param column
+     */
+    public noDefine(boolean valueB, int noTypeType, int row, int column) {
         this.valueB = valueB;
         this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = "";
     }
 
-    public noDefine(double valueD, int noTypeType) {
+    /**
+     * this method is to carrier the "Integer" value to be operated, is
+     * necessary to add the row and column, it's to show friendly the error
+     *
+     * Doesn't care of the name of the variable
+     *
+     * @param valueD
+     * @param noTypeType
+     * @param row
+     * @param column
+     */
+    public noDefine(double valueD, int noTypeType, int row, int column) {
         this.valueD = valueD;
         this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = "";
     }
 
-    public noDefine(String valueS, int noTypeType) {
+    /**
+     * this method is to carrier the "String" value to be operated, is necessary
+     * to add the row and column, it's to show friendly the error
+     *
+     * Doesn't care of the name of the variable
+     *
+     * @param valueS
+     * @param noTypeType
+     * @param row
+     * @param column
+     */
+    public noDefine(String valueS, int noTypeType, int row, int column) {
         this.valueS = valueS;
         this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = "";
+    }
+
+    /**
+     * this method is to carrier the "String" value to be operated, is necessary
+     * to add the row and column, it's to show friendly the error
+     *
+     * this method include the name to add it at the "three directions code"
+     *
+     * @param valueS
+     * @param noTypeType
+     * @param row
+     * @param column
+     * @param name
+     */
+    public noDefine(String valueS, int noTypeType, int row, int column, String name) {
+        this.valueS = valueS;
+        this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = name;
+    }
+
+    /**
+     * this method is to carrier the "Integer" value to be operated, is
+     * necessary to add the row and column, it's to show friendly the error
+     *
+     * this method include the name to add it at the "three directions code"
+     *
+     * @param valueD
+     * @param noTypeType
+     * @param row
+     * @param column
+     * @param name
+     */
+    public noDefine(double valueD, int noTypeType, int row, int column, String name) {
+        this.valueD = valueD;
+        this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = name;
+    }
+
+    /**
+     * this method is to carrier the "Boolean" value to be operated, is
+     * necessary to add the row and column, it's to show friendly the error
+     *
+     * this method include the name to add it at the "three directions code"
+     *
+     * @param valueB
+     * @param noTypeType
+     * @param row
+     * @param column
+     * @param name
+     */
+    public noDefine(boolean valueB, int noTypeType, int row, int column, String name) {
+        this.valueB = valueB;
+        this.noTypeType = noTypeType;
+        this.row = row;
+        this.column = column;
+        this.name = name;
     }
 
     public String getValueS() {
@@ -61,6 +166,30 @@ public class noDefine {
 
     public void setNoTypeType(int noTypeType) {
         this.noTypeType = noTypeType;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
 
 }
