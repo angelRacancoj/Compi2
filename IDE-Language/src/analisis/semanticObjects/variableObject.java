@@ -97,24 +97,49 @@ public class variableObject {
         }
     }
 
+    public String textVar() {
+        if (this.type.nameData == languageC.INTEGER) {
+            return textIntegerVar();
+        } else if (this.type.nameData == languageC.FLOAT) {
+            return textFloatVar();
+        } else if (this.type.nameData == languageC.STRING) {
+            return textStringVar();
+        } else if (this.type.nameData == languageC.BOOLEAN) {
+            return textBoolVar();
+        }
+        return null;
+    }
+
     private void printIntegerVar() {
-        System.out.println("Valor " + this.valueI + ", id: " + this.id
-                + " Tipo: " + getTypeName() + " Category " + this.category);
+        System.out.println("Valor: " + this.valueI + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private String textIntegerVar() {
+        return ("Valor: " + this.valueI + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
     }
 
     private void printFloatVar() {
-        System.out.println("Valor " + this.valueF + ", id: " + this.id
-                + " Tipo: " + getTypeName() + " Category " + this.category);
+        System.out.println("Valor: " + this.valueF + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private String textFloatVar() {
+        return ("Valor: " + this.valueF + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
     }
 
     private void printStringVar() {
-        System.out.println("Valor " + this.valueS + ", id: " + this.id
-                + " Tipo: " + getTypeName() + " Category " + this.category);
+        System.out.println("Valor: " + this.valueS + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private String textStringVar() {
+        return ("Valor: " + this.valueS + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
     }
 
     private void printBoolVar() {
-        System.out.println("Valor " + this.valueB + ", id: " + this.id
-                + " Tipo: " + getTypeName() + " Category " + this.category);
+        System.out.println("Valor: " + this.valueB + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
+    }
+
+    private String textBoolVar() {
+        return ("Valor: " + this.valueB + ", id: " + this.id + " Tipo: " + getTypeName() + " Category " + this.category);
     }
 
     /**

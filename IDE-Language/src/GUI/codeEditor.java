@@ -175,14 +175,17 @@ public class codeEditor extends javax.swing.JPanel {
             lex.yyreset(new StringReader(codeTextArea.getText()));
             this.sintact.parse();
             System.out.println("No hay errores");
+            errorsTextArea.setText(semanticM.textVars());
+            JOptionPane.showMessageDialog(this, "No se han hallado errores\nCodigo 3 Direcciones Generado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             System.out.println("Error:" + e.getMessage());
             e.printStackTrace();
             errors.add(e.getMessage());
             semanticM.reset3DirCode();
             semanticM.resetVarList();
+            showErrors();
+            JOptionPane.showMessageDialog(this, "Se han hallado errores, realizar los cambios necesarios en el codigo", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        showErrors();
         semanticM.printVars();
     }//GEN-LAST:event_testButtonActionPerformed
 

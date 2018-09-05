@@ -333,6 +333,14 @@ public class semanticManager {
         }
     }
 
+    public String textVars() {
+        String vars = "Variables:\n";
+        for (variableObject var : varList) {
+            vars += (var.textVar() + "\n");
+        }
+        return vars;
+    }
+
     private dataType findDataType(int type) {
         for (dataType typeList1 : typeList) {
             if (typeList1.getNameData() == type) {
