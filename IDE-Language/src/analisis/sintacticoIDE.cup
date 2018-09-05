@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import analisis.semantic.*;
 import analisis.semanticObjects.*;
 import languageConstants.languageConstants;
+import exceptions.InputsVaciosException;
 
 parser code {:
 
@@ -17,12 +18,15 @@ parser code {:
 		this.ops = ops;
 	}
 
+    @Override
 	public void syntax_error(Symbol cur_token) {
 		String message = "Estructura invalida en Columna: " + cur_token.right
 			 + " Fila: " + cur_token.left + " , token: " + cur_token.value;
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");	 
 		System.out.println(message);
 		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+		semanticM.reset3DirCode();
+		ops.resetTemp3Dir();
 	}
 :}
 
@@ -51,7 +55,7 @@ precedence left And, Or;
 
 start with INICIO_CODIGO;
 
-INICIO_CODIGO	::= CODIGO
+INICIO_CODIGO	::= CODIGO {: semanticM.create3DirCodeDoc(); :}
 					;
 
 CODIGO 			::=	CUERPO_CODIGO CODIGO					{: :}
@@ -115,6 +119,7 @@ ID_STRING		::=	Identificador:e1 Asignacion CONCATENAR:e2	{: RESULT = ops.tempVar
 
 CONCATENAR		::= CONCATENAR:e1 Mas:e3 Cadena:e2				{: RESULT = ops.stringOp(e1, new noDefine(e2, languageC.STRING_AUX, e2left, e2right), e3left, e3right); :}
 					| CONCATENAR:e1 Mas:e3 OPERACION:e2 		{: RESULT = ops.stringOp(e1, e2, e3left, e3right); :}
+					| OPERACION:e1 Mas:e3 CONCATENAR:e2 		{: RESULT = ops.stringOp(e1, e2, e3left, e3right); :}
 					| ParAbierto CONCATENAR:e ParCerrado		{: RESULT = e; :}
 					| Cadena:e	 								{: RESULT = new noDefine(e, languageC.STRING_AUX, eleft, eright); :}
 					;
@@ -133,7 +138,7 @@ INSIDE_CODE		::= CorAbierto MAIN_BODY:e CorCerrado			{: RESULT = semanticM.findB
 WHILE_FUNCION	::= NamWhile ParAbierto OPERACION:e1 ParCerrado INSIDE_CODE:e2 	{: semanticM.correctIfOperator(e1); RESULT = semanticM.findBreakInWhile(e2); :}
 					;
 
-PRINT_FUNCION	::= PRINT_OPTION ParAbierto CONCATENAR:e ParCerrado EndCom		{: semanticM.correctStringOperator(e); :}
+PRINT_FUNCION	::= PRINT_OPTION ParAbierto CONCATENAR:e ParCerrado EndCom		{: semanticM.correctStringOperator(e); RESULT = false;:}
 					;
 
 PRINT_OPTION	::= PrintN 		{: :}

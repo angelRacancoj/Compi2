@@ -18,6 +18,7 @@ public class noDefine {
     int row;
     int column;
     String name;
+    String id3Dir;
 
     /**
      * this method is to carrier the "Boolean" value to be operated, is

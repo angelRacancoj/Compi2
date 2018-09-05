@@ -39,27 +39,27 @@ public class operation {
      */
     public noDefine stringOp(noDefine dato1, noDefine dato2, int row, int column) throws InputsVaciosException {
         if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-            return new noDefine((String.valueOf(dato1.getValueD()) + dato2.isValueB()), languageC.STRING_AUX, row, column);
+            return new noDefine((String.valueOf((int) dato1.getValueD()) + dato2.isValueB()), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
         } else if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine(dato1.getValueD() + dato2.getValueS().replaceAll("\"", ""), languageC.STRING_AUX, row, column);
+            return new noDefine((int) dato1.getValueD() + dato2.getValueS().replaceAll("\"", ""), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-            return new noDefine((dato1.getValueD() + String.valueOf(dato2.getValueD())), languageC.STRING_AUX, row, column);
+            return new noDefine(((int) dato1.getValueD() + String.valueOf((int) dato2.getValueD())), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-            return new noDefine((String.valueOf(dato1.isValueB()) + String.valueOf(dato2.isValueB())), languageC.STRING_AUX, row, column);
+            return new noDefine((String.valueOf(dato1.isValueB()) + String.valueOf(dato2.isValueB())), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine((dato1.isValueB() + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX, row, column);
+            return new noDefine((dato1.isValueB() + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.getValueD()), languageC.STRING_AUX, row, column);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + (int) dato2.getValueD()), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.isValueB()), languageC.STRING_AUX, row, column);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.isValueB()), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else if ((dato1.getNoTypeType() == languageC.STRING_AUX) && (dato2.getNoTypeType() == languageC.STRING_AUX)) {
-            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX, row, column);
+            return new noDefine((dato1.getValueS().replaceAll("\"", "") + dato2.getValueS()).replaceAll("\"", ""), languageC.STRING_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
 
         } else {
             throw new InputsVaciosException("Los datos no se pueden imprimir juntos fila: " + row + " Columna: " + column);
@@ -83,13 +83,13 @@ public class operation {
         if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
             switch (operator) {
                 case 1:
-                    return new noDefine((dato1.getValueD() + dato2.getValueD()), languageC.DOUBLE_AUX, row, column);
+                    return new noDefine((dato1.getValueD() + dato2.getValueD()), languageC.DOUBLE_AUX, row, column, addToTemp3dir(dato1, dato2, "+"));
                 case 2:
-                    return new noDefine((dato1.getValueD() - dato2.getValueD()), languageC.DOUBLE_AUX, row, column);
+                    return new noDefine((dato1.getValueD() - dato2.getValueD()), languageC.DOUBLE_AUX, row, column, addToTemp3dir(dato1, dato2, "-"));
                 case 3:
-                    return new noDefine((dato1.getValueD() * dato2.getValueD()), languageC.DOUBLE_AUX, row, column);
+                    return new noDefine((dato1.getValueD() * dato2.getValueD()), languageC.DOUBLE_AUX, row, column, addToTemp3dir(dato1, dato2, "*"));
                 case 4:
-                    return new noDefine((dato1.getValueD() / dato2.getValueD()), languageC.DOUBLE_AUX, row, column);
+                    return new noDefine((dato1.getValueD() / dato2.getValueD()), languageC.DOUBLE_AUX, row, column, addToTemp3dir(dato1, dato2, "/"));
                 default:
                     throw new InputsVaciosException("Operacion inexistente");
             }
@@ -117,52 +117,52 @@ public class operation {
         switch (operator) {
             case 1:
                 if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-                    return new noDefine((dato1.getValueD() > dato2.getValueD()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.getValueD() > dato2.getValueD()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, ">"));
                 } else {
                     catchIncorrectValues(">", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
                 }
                 break;
             case 2:
                 if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-                    return new noDefine((dato1.getValueD() < dato2.getValueD()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.getValueD() < dato2.getValueD()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "<"));
                 } else {
                     catchIncorrectValues("<", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
                 }
                 break;
             case 3:
                 if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-                    return new noDefine((dato1.getValueD() == dato2.getValueD()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.getValueD() == dato2.getValueD()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "=="));
                 } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-                    return new noDefine((dato1.isValueB() == dato2.isValueB()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.isValueB() == dato2.isValueB()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "=="));
                 } else if ((dato1.getNoTypeType() != languageC.DOUBLE_AUX) && (dato2.getNoTypeType() != languageC.DOUBLE_AUX) && ((dato1.getNoTypeType() == languageC.BOOL_AUX) || (dato2.getNoTypeType() == languageC.BOOL_AUX))) {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
+                    catchIncorrectValues("==", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
                 } else {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
+                    catchIncorrectValues("==", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
                 }
                 break;
             case 4:
                 if ((dato1.getNoTypeType() == languageC.DOUBLE_AUX) && (dato2.getNoTypeType() == languageC.DOUBLE_AUX)) {
-                    return new noDefine((dato1.getValueD() != dato2.getValueD()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.getValueD() != dato2.getValueD()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "!="));
                 } else if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-                    return new noDefine((dato1.isValueB() != dato2.isValueB()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.isValueB() != dato2.isValueB()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "!="));
                 } else if ((dato1.getNoTypeType() != languageC.DOUBLE_AUX) && (dato2.getNoTypeType() != languageC.DOUBLE_AUX) && ((dato1.getNoTypeType() == languageC.BOOL_AUX) || (dato2.getNoTypeType() == languageC.BOOL_AUX))) {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
+                    catchIncorrectValues("!=", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
                 } else {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
+                    catchIncorrectValues("!=", dato1, dato2, row, column, languageC.DOUBLE_AUX, languageC.DOUBLE_AUX);
                 }
                 break;
             case 5:
                 if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-                    return new noDefine((dato1.isValueB() && dato2.isValueB()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.isValueB() && dato2.isValueB()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "&&"));
                 } else {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
+                    catchIncorrectValues("&&", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
                 }
                 break;
             case 6:
                 if ((dato1.getNoTypeType() == languageC.BOOL_AUX) && (dato2.getNoTypeType() == languageC.BOOL_AUX)) {
-                    return new noDefine((dato1.isValueB() || dato2.isValueB()), languageC.BOOL_AUX, row, column);
+                    return new noDefine((dato1.isValueB() || dato2.isValueB()), languageC.BOOL_AUX, row, column, addToTemp3dir(dato1, dato2, "||"));
                 } else {
-                    catchIncorrectValues("<", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
+                    catchIncorrectValues("||", dato1, dato2, row, column, languageC.BOOL_AUX, languageC.BOOL_AUX);
                 }
                 break;
             default:
@@ -173,18 +173,32 @@ public class operation {
     }
 
     public variableObject tempVar(String id, noDefine noDefineVar) throws InputsVaciosException {
-        /*
-
-         */
         if (noDefineVar != null) {
             if (noDefineVar.getNoTypeType() == languageC.DOUBLE_AUX) {
                 //variableObject(double valueTemp, int tempType, String id)
+                if (noDefineVar.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+                    addToTemp3dir(id, String.valueOf(noDefineVar.getValueD()));
+                } else {
+                    addToTemp3dir(id, noDefineVar.getName());
+                }
                 return new variableObject(noDefineVar.getValueD(), languageC.DOUBLE_AUX, id);
             } else if (noDefineVar.getNoTypeType() == languageC.BOOL_AUX) {
                 //variableObject(boolean valueB, int tempType, String id)
+                if (noDefineVar.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+                    addToTemp3dir(id, String.valueOf(noDefineVar.isValueB()));
+                } else {
+                    addToTemp3dir(id, noDefineVar.getName());
+                }
+                addToTemp3dir(id, noDefineVar.getName());
                 return new variableObject(noDefineVar.isValueB(), languageC.BOOL_AUX, id);
             } else if (noDefineVar.getNoTypeType() == languageC.STRING_AUX) {
                 //variableObject(String valueS, int tempType, String id)
+                if (noDefineVar.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+                    addToTemp3dir(id, String.valueOf(noDefineVar.getValueS()));
+                } else {
+                    addToTemp3dir(id, noDefineVar.getName());
+                }
+                addToTemp3dir(id, noDefineVar.getName());
                 return new variableObject(noDefineVar.getValueS(), languageC.STRING_AUX, id);
             } else {
                 throw new InputsVaciosException("Datos incompatible para realizar la operacion");
@@ -195,7 +209,7 @@ public class operation {
     }
 
     private void sendError(String name, String operator, int row, int column) throws InputsVaciosException {
-        throw new InputsVaciosException("Dato incompatible para la operacion\n>> " + operator + " << Dato: " + name + " Fila: " + row + " Columna: " + column);
+        throw new InputsVaciosException("Dato incompatible para la operacion>> " + operator + " << \nDato: " + name + " Fila: " + row + " Columna: " + column);
     }
 
     private void catchIncorrectValues(String operator, noDefine dato1, noDefine dato2, int row, int column, int type1, int type2) throws InputsVaciosException {
@@ -236,15 +250,61 @@ public class operation {
         this.temp3Dir = temp3Dir;
     }
 
-    public void addToTemp3dir(String id1, String id2, String operator, String id3) {
-        temp3Dir.add(id1 + "=" + id2 + operator + id1 + ";");
+    public String addToTemp3dir(noDefine dato1, noDefine dato2, String operator) throws InputsVaciosException {
+        if (dato1.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty() && dato2.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+            String temp = "d" + contador;
+            temp3Dir.add(temp + " = " + valueParsed(dato1) + " " + operator + " " + valueParsed(dato2));
+            contador++;
+            return temp;
+        } else if (!dato1.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty() && dato2.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+            String temp = "d" + contador;
+            temp3Dir.add(temp + " = " + dato1.getName() + " " + operator + " " + valueParsed(dato2));
+            contador++;
+            return temp;
+        } else if (dato1.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty() && !dato2.getName().replaceAll(" ", "").replaceAll("\t", "").isEmpty()) {
+            String temp = "d" + contador;
+            temp3Dir.add(temp + " = " + valueParsed(dato1) + " " + operator + " " + dato2.getName());
+            contador++;
+            return temp;
+        } else {
+            String temp = "d" + contador;
+            temp3Dir.add(temp + " = " + dato1.getName() + " " + operator + " " + dato2.getName());
+            contador++;
+            return temp;
+        }
+
+    }
+
+    private String valueParsed(noDefine dato) throws InputsVaciosException {
+        if (dato.getNoTypeType() == languageC.BOOL_AUX) {
+            return String.valueOf(dato.isValueB());
+        } else if (dato.getNoTypeType() == languageC.DOUBLE_AUX) {
+            return String.valueOf(dato.getValueD());
+        } else if (dato.getNoTypeType() == languageC.STRING_AUX) {
+            return dato.getValueS();
+        } else {
+            throw new InputsVaciosException("No hay dato para devolver");
+        }
     }
 
     public void addToTemp3dir(String id1, String id2) {
-        temp3Dir.add(id1 + "=" + id2 + ";");
+        temp3Dir.add(id1 + " = " + id2 + " ;");
     }
 
     public void resetTemp3Dir() {
         temp3Dir.clear();
     }
+
+    public int getContador() {
+        return contador;
+    }
+
+    public void setContador(int contador) {
+        this.contador = contador;
+    }
+
+    public void addOneToContador() {
+        contador++;
+    }
+
 }

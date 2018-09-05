@@ -41,8 +41,8 @@ public class codeEditor extends javax.swing.JPanel {
      * @param path
      */
     public codeEditor(String path) {
-        semanticM = new semanticManager();
         ops = new operation();
+        semanticM = new semanticManager(ops);
 
         this.lex = new Lexer(new StringReader(""));
         this.sintact = new sintactico(lex, semanticM, ops);
@@ -176,9 +176,13 @@ public class codeEditor extends javax.swing.JPanel {
             this.sintact.parse();
             System.out.println("No hay errores");
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            System.out.println("Error:" + e.getMessage());
+            e.printStackTrace();
+            errors.add(e.getMessage());
+            semanticM.reset3DirCode();
+            semanticM.resetVarList();
         }
-
+        showErrors();
         semanticM.printVars();
     }//GEN-LAST:event_testButtonActionPerformed
 
@@ -200,7 +204,7 @@ public class codeEditor extends javax.swing.JPanel {
         return codeTextArea.getText();
     }
 
-    public void saveProgress() {
+    private void saveProgress() {
         try {
             if (!filesManager.lecturaArchivo(path).equals(codeTextArea.getText())) {
                 filesManager.guardarArchivo(path, codeTextArea.getText());
@@ -220,6 +224,14 @@ public class codeEditor extends javax.swing.JPanel {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    private void showErrors() {
+        String errorsText = "";
+        for (String error : errors) {
+            errorsText += (error + "\n");
+        }
+        errorsTextArea.setText(errorsText);
     }
 
 }

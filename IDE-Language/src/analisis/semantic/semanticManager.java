@@ -7,6 +7,8 @@ package analisis.semantic;
 
 import analisis.semanticObjects.*;
 import exceptions.InputsVaciosException;
+import files.ManejadorArchivo;
+import java.io.IOException;
 import java.util.LinkedList;
 import languageConstants.languageConstants;
 
@@ -20,8 +22,11 @@ public class semanticManager {
     LinkedList<dataType> typeList = new LinkedList<>();
     LinkedList<variableObject> varList = new LinkedList<>();
     LinkedList<String> threeDirectionsCode = new LinkedList<>();
+    operation ops;
+    ManejadorArchivo files = new ManejadorArchivo();
 
-    public semanticManager() {
+    public semanticManager(operation ops) {
+        this.ops = ops;
         initDataType();
     }
 
@@ -48,16 +53,17 @@ public class semanticManager {
     public noDefine returnNoDefineObject(String id, int row, int column) throws InputsVaciosException {
         variableObject varObj = findVariable(id);
         if (varObj != null) {
-            if (varObj.getCategory() == languageC.INTEGER) {
+            if (varObj.getType().getNameData() == languageC.INTEGER) {
+
                 return new noDefine(varObj.getValueI(), languageC.DOUBLE_AUX, row, column, id);
 
-            } else if (varObj.getCategory() == languageC.FLOAT) {
+            } else if (varObj.getType().getNameData() == languageC.FLOAT) {
                 return new noDefine(varObj.getValueF(), languageC.DOUBLE_AUX, row, column, id);
 
-            } else if (varObj.getCategory() == languageC.BOOLEAN) {
+            } else if (varObj.getType().getNameData() == languageC.BOOLEAN) {
                 return new noDefine(varObj.isValueB(), languageC.BOOL_AUX, row, column, id);
 
-            } else if (varObj.getCategory() == languageC.STRING) {
+            } else if (varObj.getType().getNameData() == languageC.STRING) {
                 return new noDefine(varObj.getValueS(), languageC.STRING_AUX, row, column, id);
 
             } else {
@@ -80,20 +86,31 @@ public class semanticManager {
         if (varFound != null) {
             if ((var.getTempType() == languageC.BOOL_AUX) && (varFound.getType().getNameData() == languageC.BOOLEAN)) {
                 varFound.setValueB(var.isValueB());
+                addTo3DirCode(ops.getTemp3Dir());
+                ops.resetTemp3Dir();
             } else if ((var.getTempType() == languageC.STRING_AUX) && (varFound.getType().getNameData() == languageC.STRING)) {
                 varFound.setValueS(var.getValueS());
+                addTo3DirCode(ops.getTemp3Dir());
+                ops.resetTemp3Dir();
             } else if ((var.getTempType() == languageC.DOUBLE_AUX)) {
                 if ((varFound.getType().getNameData() == languageC.INTEGER) && languageC.isInteger(var.getValueTemp())) {
                     varFound.setValueI((int) var.getValueTemp());
+                    addTo3DirCode(ops.getTemp3Dir());
+                    ops.resetTemp3Dir();
                 } else if (varFound.getType().getNameData() == languageC.FLOAT) {
                     varFound.setValueF((float) var.getValueTemp());
+                    addTo3DirCode(ops.getTemp3Dir());
+                    ops.resetTemp3Dir();
                 } else {
+                    ops.resetTemp3Dir();
                     throw new InputsVaciosException("Tipo de dato incompatible, Linea " + row);
                 }
             } else {
+                ops.resetTemp3Dir();
                 throw new InputsVaciosException("No existe la variable " + var.getId() + " el tipo de dato indicado " + var.getTempType());
             }
         } else {
+            ops.resetTemp3Dir();
             throw new InputsVaciosException("No existe la variable >>> " + var.getId() + " <<< Linea: " + row);
 
         }
@@ -111,28 +128,38 @@ public class semanticManager {
         if ((type == languageC.INTEGER) && (var.getTempType() == languageC.DOUBLE_AUX)) {
             if (languageC.isInteger(var.getValueTemp())) {
                 addVariableToListInt(type, var.getId(), (int) var.getValueTemp(), row, column);
+                ops.resetTemp3Dir();
             } else {
                 throw new InputsVaciosException("El valor para >> " + var.getId() + " << no es Integer Linea: " + row);
             }
         } else if ((type == languageC.FLOAT) && (var.getTempType() == languageC.DOUBLE_AUX)) {
             addVariableToList(type, var.getId(), (float) var.getValueTemp(), row, column);
+            ops.resetTemp3Dir();
         } else if ((type == languageC.BOOLEAN) && (var.getTempType() == languageC.BOOL_AUX)) {
             addVariableToList(type, var.getId(), var.isValueB(), row, column);
+            ops.resetTemp3Dir();
         } else if ((type == languageC.STRING) && (var.getTempType() == languageC.STRING_AUX)) {
             addVariableToList(type, var.getId(), var.getValueS(), row, column);
+            ops.resetTemp3Dir();
         } else if (var.getValueS().equals(languageC.NO_TYPE)) {
             if (type == languageC.FLOAT) {
                 addVariableToList(type, var.getId(), 0, row, column);
+                ops.resetTemp3Dir();
             } else if ((type == languageC.INTEGER)) {
                 addVariableToListInt(type, var.getId(), 0, row, column);
+                ops.resetTemp3Dir();
             } else if (type == languageC.BOOLEAN) {
                 addVariableToList(type, var.getId(), true, row, column);
+                ops.resetTemp3Dir();
             } else if (type == languageC.STRING) {
                 addVariableToList(type, var.getId(), "", row, column);
+                ops.resetTemp3Dir();
             } else {
+                ops.resetTemp3Dir();
                 throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " << Linea: " + row);
             }
         } else {
+            ops.resetTemp3Dir();
             throw new InputsVaciosException("No ha guardado la variable: >> " + var.getId() + " << Linea: " + row);
         }
     }
@@ -332,4 +359,27 @@ public class semanticManager {
         this.threeDirectionsCode = threeDirectionsCode;
     }
 
+    public void addTo3DirCode(LinkedList<String> temp3DirCode) {
+        threeDirectionsCode.addAll(ops.getTemp3Dir());
+        ops.resetTemp3Dir();
+    }
+
+    private String text3DirOut() {
+        String textOut = "";
+        for (String threeDirectionsCode1 : threeDirectionsCode) {
+            textOut += (threeDirectionsCode1 + "\n");
+        }
+        return textOut;
+    }
+
+    public void create3DirCodeDoc() throws IOException {
+        files.guardarArchivo("3DirectionsCode.txt", text3DirOut());
+        reset3DirCode();
+        ops.setContador(0);
+    }
+
+    public void reset3DirCode() {
+        threeDirectionsCode.clear();
+        ops.setContador(0);
+    }
 }
