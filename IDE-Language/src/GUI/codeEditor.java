@@ -55,15 +55,15 @@ public class codeEditor extends javax.swing.JPanel {
      * @param path
      */
     public codeEditor(String path) {
+        initComponents();
         ops = new operation();
         semanticM = new semanticManager(ops);
 
         this.lex = new Lexer(new StringReader(""));
-        this.sintact = new sintactico(lex, semanticM, ops);
+        this.sintact = new sintactico(lex, semanticM, ops, this);
 
         filesManager = new ManejadorArchivo();
         this.path = path;
-        initComponents();
         textLine = new TextLineNumber(codeTextArea);
         jScrollPane1.setRowHeaderView(textLine);
         undoM = new UndoManager();
@@ -294,4 +294,7 @@ public class codeEditor extends javax.swing.JPanel {
         errorsTextArea.setText(errorsText);
     }
 
+    public void addError(String error) {
+        errors.add(error);
+    }
 }

@@ -5,17 +5,20 @@ import analisis.semantic.*;
 import analisis.semanticObjects.*;
 import languageConstants.languageConstants;
 import exceptions.InputsVaciosException;
+import GUI.codeEditor;
 
 parser code {:
 
 	private semanticManager semanticM;
 	private operation ops;
 	languageConstants languageC = new languageConstants();
+	private codeEditor codeE;
 
-	public sintactico(Lexer lex, semanticManager semanticM, operation ops){
+	public sintactico(Lexer lex, semanticManager semanticM, operation ops, codeEditor codeE){
 		super(lex);
 		this.semanticM = semanticM;
 		this.ops = ops;
+		this.codeE = codeE;
 	}
 
     @Override
@@ -24,6 +27,7 @@ parser code {:
 			 + " Fila: " + cur_token.left + " , token: " + cur_token.value;
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<");	 
 		System.out.println(message);
+        codeE.addError(message);
 		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		semanticM.reset3DirCode();
 		ops.resetTemp3Dir();
