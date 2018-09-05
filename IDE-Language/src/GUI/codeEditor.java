@@ -10,14 +10,27 @@ import analisis.semantic.operation;
 import analisis.semantic.semanticManager;
 import analisis.sintactico;
 import files.ManejadorArchivo;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.LinkedList;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 /**
  *
@@ -25,6 +38,7 @@ import javax.swing.text.BadLocationException;
  */
 public class codeEditor extends javax.swing.JPanel {
 
+    private UndoManager undoM;
     String path;
     ManejadorArchivo filesManager;
     TextLineNumber textLine;
@@ -52,6 +66,16 @@ public class codeEditor extends javax.swing.JPanel {
         initComponents();
         textLine = new TextLineNumber(codeTextArea);
         jScrollPane1.setRowHeaderView(textLine);
+        undoM = new UndoManager();
+        Document doc = codeTextArea.getDocument();
+
+        doc.addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+                System.out.println("Add edit");
+                undoM.addEdit(e.getEdit());
+            }
+        });
 
         codeTextArea.addCaretListener(new CaretListener() {
 
@@ -79,6 +103,39 @@ public class codeEditor extends javax.swing.JPanel {
             }
         });
 
+        InputMap inMap = codeTextArea.getInputMap(JComponent.WHEN_FOCUSED);
+        ActionMap actMap = codeTextArea.getActionMap();
+
+        inMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Undo");
+        inMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "Redo");
+
+        actMap.put("Undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (undoM.canUndo()) {
+                        undoM.undo();
+                    }
+                } catch (CannotUndoException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
+        actMap.put("Redo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (undoM.canRedo()) {
+                        undoM.redo();
+                    }
+                } catch (CannotUndoException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private void updateStatus(int linenumber, int columnnumber) {
