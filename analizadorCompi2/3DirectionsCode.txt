@@ -1,0 +1,56 @@
+x = 0
+y = 0
+id1 = true
+f1 = 0
+f2 = 0
+d0 = 2.0 * 4.0
+d1 = d0 + 5.0
+f3 = d1
+a = 0
+b = 2.0
+c = 0
+x = 6.0
+y = 1.0
+
+goto lw0
+lw0:
+d2 = x > 0.0
+if (d2) goto While1
+goto lw2
+lf0:
+d3 = y * x
+y = d3
+d4 = x - 1.0
+x = d4
+goto lw0
+lw2:
+d5 = a == 1.0
+
+if (d5) goto lf0
+goto lf1
+lf0:
+y = 12.0
+
+goto lw3
+lw3:
+d6 = 1.0 * 2.0
+d7 = c + d6
+d8 = d7 > 0.0
+if (d8) goto While4
+goto lw5
+lf2:
+goto lw3
+lw5:
+lf1:
+f1 = 13.0
+
+if (id1) goto lf2
+goto lf3
+lf2:
+lf3:
+d9 = y * 35.0
+d10 = 25.0 + d9
+d11 = a / f1
+d12 = d11 + 8.0
+d13 = d10 - d12
+x = d13
